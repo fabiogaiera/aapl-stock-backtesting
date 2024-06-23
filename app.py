@@ -13,11 +13,17 @@ def fetch_data(ticker):
 
 # Calculate SMAs and generate signals
 def calculate_sma(data, short_window, long_window):
+    # Calculate SMA_short and SMA_long
     data['SMA_short'] = data['Adj Close'].rolling(window=short_window, min_periods=1).mean()
     data['SMA_long'] = data['Adj Close'].rolling(window=long_window, min_periods=1).mean()
 
+    # Initialize Signal column
     data['Signal'] = 0
-    data['Signal'][short_window:] = np.where(data['SMA_short'][short_window:] > data['SMA_long'][short_window:], 1, 0)
+
+    # Calculate signals based on SMA_short and SMA_long
+    data.loc[data.index[short_window:], 'Signal'] = np.where(data['SMA_short'][short_window:] > data['SMA_long'][short_window:], 1, 0)
+
+    # Calculate Position column
     data['Position'] = data['Signal'].diff()
 
     return data
@@ -25,6 +31,7 @@ def calculate_sma(data, short_window, long_window):
 
 # Initialize the Dash app
 app = dash.Dash(__name__)
+server = app.server
 
 # Fetch data and calculate SMAs
 data = fetch_data('AAPL')
@@ -82,4 +89,4 @@ app.layout = html.Div(children=[
 ])
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    app.run_server(debug=False)
