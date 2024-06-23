@@ -1,2 +1,1 @@
-# aapl-stock-backtesting
-AAPL stock backtesting
+# AAPL stock backtesting
