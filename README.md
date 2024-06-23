@@ -1,1 +1,1 @@
-# AAPL stock backtesting
+# AAPL Stock Backtesting
